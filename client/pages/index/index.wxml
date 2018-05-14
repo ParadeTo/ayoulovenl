@@ -1,0 +1,27 @@
+<view class='index-page'>
+  <swiper class='swiper' indicator-dots="{{false}}"
+    autoplay="{{true}}" interval="{{5000}}" duration="{{1000}}">
+    <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+      <swiper-item>
+        <image src="{{item}}" mode="aspectFill" class="slide-image" />
+      </swiper-item>
+    </block>
+  </swiper>
+  <view class='btn-group'>
+    <button class="button" type="primary">我要去</button>
+    <button class="map-btn" type="default">
+      <image class="map" src="./map.png"></image>
+    </button>
+    <button class="button info">说点啥</button>
+  </view>
+  <block wx:for="{{messages}}" wx:key="{{item.id}}">
+    <view class='message-wrapper' style="color: {{item.color}}; top: {{item.top}}; left: {{item.left}}; animation-duration: {{item.duration}}s;">
+      <image src="{{item.avatar}}" class='avatar'></image>
+      <!-- <view class='message-content' style="{{'color:' + item.color + 
+        ';transform:' + 'translate('' }}"> -->
+      <view class='message-content'>
+        {{item.content}}
+      </view>
+    </view>
+  </block>
+</view>

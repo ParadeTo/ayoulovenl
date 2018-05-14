@@ -1,0 +1,71 @@
+.index-page {
+  height: 100%;
+  position: relative;
+}
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+.item {
+  height: 100%;
+}
+.slide-image {
+  height: 100%;
+  width: 100%;
+}
+.btn-group {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 30rpx;
+  width: 100%;
+}
+.button {
+  width: 40%;
+}
+.map-btn {
+  background-color: blue;
+  display: flex;
+  align-items: center;
+}
+.map {
+  width: 50rpx;
+  height: 50rpx;
+}
+.info {
+  background-color: #46b8da;
+  color: white;
+}
+.animation-wrapper {
+  position: absolute;  
+  height: 100%;
+  width: 300%;
+
+  top: 0;
+  left: 0;
+}
+.message-wrapper {
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  align-items: center;
+  animation-name: move;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  /* ani */
+}
+.avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 10rpx;
+}
+@keyframes move {
+  to {
+    transform: translateX(-400vw);
+  }
+}
