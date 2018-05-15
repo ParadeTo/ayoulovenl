@@ -7,18 +7,24 @@
       </swiper-item>
     </block>
   </swiper>
-  <view class='btn-group'>
+   <view class='btn-group' wx:if="{{!showInput}}">
     <button class="button" type="primary">我要去</button>
-    <button class="map-btn" type="default">
-      <image class="map" src="./map.png"></image>
-    </button>
-    <button class="button info">说点啥</button>
+    <navigator url="/pages/map/map">
+      <button class="map-btn" type="default">
+        <image class="map" src="./map.png"></image>
+      </button>
+    </navigator>
+    <button class="button info" bindtap="showInput">说点啥</button>
   </view>
+  <view wx:else class="input-wrapper">
+    <input class="input" maxlength="20" auto-focus="{{true}}" />
+    <button class="send" type="primary" size="mini">发送</button> 
+    <button class="back" type="default" size="mini" bindtap="hideInput">返回</button>
+  </view>
+
   <block wx:for="{{messages}}" wx:key="{{item.id}}">
     <view class='message-wrapper' style="color: {{item.color}}; top: {{item.top}}; left: {{item.left}}; animation-duration: {{item.duration}}s;">
       <image src="{{item.avatar}}" class='avatar'></image>
-      <!-- <view class='message-content' style="{{'color:' + item.color + 
-        ';transform:' + 'translate('' }}"> -->
       <view class='message-content'>
         {{item.content}}
       </view>

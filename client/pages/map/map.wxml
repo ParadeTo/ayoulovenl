@@ -1,0 +1,11 @@
+<!--pages/map/map.wxml-->
+<view class='page'>
+  <map
+    longitude="{{longitude}}" 
+    latitude="{{latitude}}" 
+    markers="{{markers}}"
+    show-location
+    style="width: 100%; height: 100%;">
+  </map>
+  <image class='go' src="./go.png" bindtap='onClickGo'></image>
+</view>

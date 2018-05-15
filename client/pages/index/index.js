@@ -1,6 +1,7 @@
 Page({
   data: {
     come: false,
+    showInput: false,
     imgUrls: [
       'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
       'http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg',
@@ -29,11 +30,23 @@ Page({
     this.initMessages()
   },
 
+  showInput (e) {
+    this.setData({
+      showInput: true
+    })
+  },
+
+  hideInput () {
+    this.setData({
+      showInput: false
+    })
+  },
+
   initMessages () {
     const arr = []
     const { colors } = this.data
     const { windowWidth, windowHeight } = wx.getSystemInfoSync()
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
       const color = colors[Math.floor(Math.random() * colors.length)]
       const left = windowWidth + Math.random() * windowWidth * 2 + 'px'
       const top = Math.random() * (windowHeight - 80) + 'px'

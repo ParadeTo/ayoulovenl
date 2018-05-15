@@ -13,13 +13,33 @@
   height: 100%;
   width: 100%;
 }
-.btn-group {
+.btn-group, .input-wrapper {
   display: flex;
   justify-content: center;
+  align-items: center;
   position: fixed;
   bottom: 30rpx;
   width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
+.input {
+  background-color: #fff;
+  padding: 0.2em;
+  border-radius: 2px;
+  font-size: 14px;
+  flex: 1;
+}
+.back, .send {
+  font-size: 14px;
+  margin: 0;
+  margin-left: 20rpx;
+  padding: 0.2em 0.5em !important;
+}
+.send {
+  padding: 0.2em 1.5em !important;
+}
+
 .button {
   width: 40%;
 }
@@ -27,6 +47,7 @@
   background-color: blue;
   display: flex;
   align-items: center;
+  padding: 10px 10px;
 }
 .map {
   width: 50rpx;
