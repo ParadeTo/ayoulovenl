@@ -6,7 +6,7 @@
     "scripts": {
         "start": "pm2 start process.prod.json --no-daemon",
         "dev": "nodemon --config nodemon.json app.js",
-        "initdb": "npm install && node tools/initdb.js"
+        "initTables": "npm install && node tools/initTables.js"
     },
     "author": "Jason",
     "license": "MIT",
@@ -21,6 +21,7 @@
         "mkdir-p": "0.0.7",
         "mysql": "^2.14.1",
         "pify": "^2.3.0",
+        "regenerator": "^0.12.3",
         "wafer-node-sdk": "^1.3.4"
     },
     "devDependencies": {

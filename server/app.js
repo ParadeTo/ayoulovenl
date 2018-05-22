@@ -4,6 +4,9 @@ const debug = require('debug')('koa-weapp-demo')
 const response = require('./middlewares/response')
 const bodyParser = require('koa-bodyparser')
 const config = require('./config')
+const DB = require('./tools/initdb')
+
+global.DB = DB
 
 // 使用响应处理中间件
 app.use(response)

@@ -1,3 +1,8 @@
+const regeneratorRuntime = require('../../utils/regenerator-runtime')
+const consts = require('../../utils/constants')
+const notify = require('../../utils/util')
+const service = require('../../config').service
+
 Page({
   data: {
     come: false,
@@ -26,6 +31,9 @@ Page({
     //   }
     // })
 
+    // login
+    // this.login()
+
     // init messages
     this.initMessages()
   },
@@ -36,13 +44,69 @@ Page({
     })
   },
 
-  hideInput () {
+  hideInput (e) {
     this.setData({
       showInput: false
     })
   },
 
-  initMessages () {
+  wxLogin () {
+    return new Promise((resolve, reject) => {
+      wx.login({
+        success: (loginRes) => {
+          resolve(loginRes.code)
+        },
+        fail: () => {
+          reject(new Error('Login fail'))
+        }
+      })
+    })
+  },
+
+  async login (userInfo) {
+    const code = await this.wxLogin()
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: service.loginUrl,
+        method: 'POST',
+        header: {
+          'content-type': 'application/json'
+        },
+        data: {
+          code,
+          userInfo
+        },
+        success: res => {
+          const data = res.data
+          if (data && data.code === 0 && data.data.openid) {
+            resolve(data.data.openid)
+          }
+        },
+        fail: reject
+      })
+    })
+  },
+
+  async getOpenid (event) {
+    try {
+      let openid = wx.getStorageSync('openid')
+      if (!openid) {
+        openid = await this.login(event.detail.userInfo)
+        wx.setStorageSync('openid', openid)
+      }
+      return openid
+    } catch (err) {
+      console.log(err)
+      notify.showModel('失败', '获取信息失败')
+    }
+  },
+
+  async wantGo (e) {
+    const openid = await this.getOpenid(e)
+    console.log(openid)
+  },
+
+  initMessages() {
     const arr = []
     const { colors } = this.data
     const { windowWidth, windowHeight } = wx.getSystemInfoSync()

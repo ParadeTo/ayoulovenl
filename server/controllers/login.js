@@ -1,10 +1,42 @@
+const debug = require('debug')('koa-weapp-demo')
 // 登录授权接口
 module.exports = async (ctx, next) => {
-    // 通过 Koa 中间件进行登录之后
-    // 登录信息会被存储到 ctx.state.$wxInfo
-    // 具体查看：
-    if (ctx.state.$wxInfo.loginState) {
-        ctx.state.data = ctx.state.$wxInfo.userinfo
-        ctx.state.data['time'] = Math.floor(Date.now() / 1000)
+  // 登录成功
+  debug(ctx.$wxInfo)
+  ctx.state = {}
+  if (ctx.$wxInfo && ctx.$wxInfo.openid) {
+    const openid = ctx.$wxInfo.openid
+    const {
+      nickName,
+      gender,
+      language,
+      city,
+      province,
+      country,
+      avatarUrl
+    } = ctx.$wxInfo.userInfo
+    // if openid not exist
+    const res = await global.DB.select('openid').from('user').where({openid})
+    debug('openid')
+    debug(res)
+    if (res.length === 0) {
+      // 保存
+      await global.DB('user').insert({
+        openid,
+        nickname: nickName,
+        gender,
+        language,
+        city,
+        province,
+        country,
+        avatar_url: avatarUrl,
+        created_at: new Date()
+      })
     }
+
+    // 返回数据
+    ctx.state.data = {
+      openid: ctx.$wxInfo.openid
+    }
+  }
 }

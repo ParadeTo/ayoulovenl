@@ -8,13 +8,13 @@
     </block>
   </swiper>
    <view class='btn-group' wx:if="{{!showInput}}">
-    <button class="button" type="primary">我要去</button>
+    <button class="button" type="primary" open-type='getUserInfo' bindgetuserinfo='wantGo'>我要去</button>
     <navigator url="/pages/map/map">
       <button class="map-btn" type="default">
         <image class="map" src="./map.png"></image>
       </button>
     </navigator>
-    <button class="button info" bindtap="showInput">说点啥</button>
+    <button class="button info" open-type='getUserInfo' bindgetuserinfo='showInput'>说点啥</button>
   </view>
   <view wx:else class="input-wrapper">
     <input class="input" maxlength="20" auto-focus="{{true}}" />
