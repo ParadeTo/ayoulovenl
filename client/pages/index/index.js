@@ -5,7 +5,7 @@ const service = require('../../config').service
 
 Page({
   data: {
-    come: false,
+    come: wx.getStorageSync('userInfo').come,
     showInput: false,
     imgUrls: [
       'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
@@ -17,6 +17,7 @@ Page({
   },
 
   onLoad() {
+    console.log(this.data.come)
     // wx.showModal({
     //   title: '你会来吗？',
     //   content: '游行至和聂玲真诚的邀请您来参加我们的婚礼',
@@ -78,8 +79,8 @@ Page({
         },
         success: res => {
           const data = res.data
-          if (data && data.code === 0 && data.data.openid) {
-            resolve(data.data.openid)
+          if (data && data.code === 0 && data.data.userInfo) {
+            resolve(data.data.userInfo)
           }
         },
         fail: reject
@@ -87,14 +88,37 @@ Page({
     })
   },
 
-  async getOpenid (event) {
+  async toggleCome (openid, come) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: service.comeUrl + openid,
+        method: 'POST',
+        header: {
+          'content-type': 'application/json'
+        },
+        data: {
+          come
+        },
+        success: res => {
+          const data = res.data
+          if (data && data.code === 0) {
+            resolve()
+          }
+        },
+        fail: reject
+      })
+    })
+  },
+
+  async getUserInfo (event) {
     try {
-      let openid = wx.getStorageSync('openid')
-      if (!openid) {
-        openid = await this.login(event.detail.userInfo)
-        wx.setStorageSync('openid', openid)
+      let userInfo = wx.getStorageSync('userInfo')
+      if (!userInfo) {
+        userInfo = await this.login(event.detail.userInfo)
+        console.log(userInfo)
+        wx.setStorageSync('userInfo', userInfo)
       }
-      return openid
+      return userInfo
     } catch (err) {
       console.log(err)
       notify.showModel('失败', '获取信息失败')
@@ -102,8 +126,12 @@ Page({
   },
 
   async wantGo (e) {
-    const openid = await this.getOpenid(e)
-    console.log(openid)
+    const userInfo = await this.getUserInfo(e)
+    const come = this.data.come > 0 ? 0 : 1
+    await this.toggleCome(userInfo.openid, come)
+    this.setData({
+      come
+    })
   },
 
   initMessages() {

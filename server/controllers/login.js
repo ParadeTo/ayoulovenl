@@ -15,11 +15,11 @@ module.exports = async (ctx, next) => {
       country,
       avatarUrl
     } = ctx.$wxInfo.userInfo
+
     // if openid not exist
-    const res = await global.DB.select('openid').from('user').where({openid})
-    debug('openid')
-    debug(res)
-    if (res.length === 0) {
+    let userInfo = await global.DB.select('*').from('user').where({openid})
+
+    if (userInfo.length === 0) {
       // 保存
       await global.DB('user').insert({
         openid,
@@ -32,11 +32,14 @@ module.exports = async (ctx, next) => {
         avatar_url: avatarUrl,
         created_at: new Date()
       })
+      // 查找
+      userInfo = await global.DB.select('*').from('user').where({openid})
     }
 
+    userInfo = userInfo[0]
     // 返回数据
     ctx.state.data = {
-      openid: ctx.$wxInfo.openid
+      userInfo
     }
   }
 }

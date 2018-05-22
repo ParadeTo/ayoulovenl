@@ -1,11 +1,34 @@
-module.exports = async (ctx, next) => {
-  // 通过 Koa 中间件进行登录态校验之后
-  // 登录信息会被存储到 ctx.state.$wxInfo
-  // 具体查看：
-  if (ctx.state.$wxInfo.loginState === 1) {
-    // loginState 为 1，登录态校验成功
-    ctx.state.data = ctx.state.$wxInfo.userinfo
-  } else {
-    ctx.state.code = -1
+const debug = require('debug')('koa-weapp-demo')
+
+exports.getUserInfo = async (ctx, next) => {
+  const openid = ctx.params.openid
+  debug(openid)
+
+  if (typeof openid === 'undefined') {
+    return
+  }
+
+  const users = await global.DB('user').select('*').where({openid})
+  debug(users)
+
+  if (users && users.length > 0) {
+    ctx.state = {
+      data: {
+        ...users[0]
+      }
+    }
+  }
+}
+
+exports.come = async (ctx, next) => {
+  const come = ctx.request.body.come || 0
+  const openid = ctx.params.openid
+  
+  if (typeof openid === 'undefined') return
+
+  const res = await global.DB('user').update({come}).where({openid})
+
+  ctx.state = {
+    code: 0
   }
 }

@@ -1,7 +1,7 @@
 const DB = require('./initdb')
 
-async function select () {
-  const res = await DB.select('openid').from('user').where({openid: 'test1'})
+async function select (openid) {
+  const res = await DB.select('*').from('user').where({openid})
   console.log(res)
 }
 
@@ -25,5 +25,5 @@ async function insert () {
   }
 }
 
-select()
-insert()
+select('test24')
+// insert()

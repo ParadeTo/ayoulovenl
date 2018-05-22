@@ -15,8 +15,11 @@ const authorization = require('../middlewares/authorization')
 // --- 登录与授权 Demo --- //
 // 登录接口
 router.post('/login', authorization, controllers.login)
+// 去或不去
+router.post('/user/:openid', controllers.user.come)
+
 // 用户信息接口（可以用来验证登录态）
-router.get('/user', validationMiddleware, controllers.user)
+router.get('/user/:openid', controllers.user.getUserInfo)
 
 // --- 图片上传 Demo --- //
 // 图片上传接口，小程序端可以直接将 url 填入 wx.uploadFile 中

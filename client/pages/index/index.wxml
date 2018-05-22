@@ -8,7 +8,9 @@
     </block>
   </swiper>
    <view class='btn-group' wx:if="{{!showInput}}">
-    <button class="button" type="primary" open-type='getUserInfo' bindgetuserinfo='wantGo'>我要去</button>
+    <button class="button" type="primary" open-type='getUserInfo' bindgetuserinfo='wantGo'>
+      {{ come > 0 ? "去不了" : "我要去" }}
+    </button>
     <navigator url="/pages/map/map">
       <button class="map-btn" type="default">
         <image class="map" src="./map.png"></image>
