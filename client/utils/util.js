@@ -37,4 +37,24 @@ var showModel = (title, content) => {
   })
 }
 
-module.exports = { formatTime, showBusy, showSuccess, showModel }
+var http = ({ url, data, method }) => {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url,
+      method,
+      header: {
+        'content-type': 'application/json'
+      },
+      data,
+      success: res => {
+        const data = res.data
+        if (data && data.code === 0) {
+          resolve(data.data)
+        }
+      },
+      fail: reject
+    })
+  })
+}
+
+module.exports = { http, formatTime, showBusy, showSuccess, showModel }

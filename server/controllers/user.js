@@ -23,10 +23,10 @@ exports.getUserInfo = async (ctx, next) => {
 exports.come = async (ctx, next) => {
   const come = ctx.request.body.come || 0
   const openid = ctx.params.openid
-  
+
   if (typeof openid === 'undefined') return
 
-  const res = await global.DB('user').update({come}).where({openid})
+  await global.DB('user').update({come}).where({openid})
 
   ctx.state = {
     code: 0

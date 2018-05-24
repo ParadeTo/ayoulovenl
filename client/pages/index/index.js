@@ -1,6 +1,6 @@
 const regeneratorRuntime = require('../../utils/regenerator-runtime')
 const consts = require('../../utils/constants')
-const notify = require('../../utils/util')
+const util = require('../../utils/util')
 const service = require('../../config').service
 
 Page({
@@ -13,6 +13,7 @@ Page({
       'http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg'
     ],
     messages: [],
+    interval: 2000,
     colors: ['#ff8b94', '#f3035b', '#fbbc00', '#80d7b5', '#1ec28a']
   },
 
@@ -36,7 +37,9 @@ Page({
     // this.login()
 
     // init messages
-    this.initMessages()
+    setInterval(() => {
+      this.initMessages()
+    }, this.data.interval)
   },
 
   showInput (e) {
@@ -66,62 +69,40 @@ Page({
 
   async login (userInfo) {
     const code = await this.wxLogin()
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: service.loginUrl,
-        method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
-        data: {
-          code,
-          userInfo
-        },
-        success: res => {
-          const data = res.data
-          if (data && data.code === 0 && data.data.userInfo) {
-            resolve(data.data.userInfo)
-          }
-        },
-        fail: reject
-      })
+    return await util.http({
+      url: service.loginUrl,
+      method: 'POST',
+      data: {
+        code,
+        userInfo
+      },
     })
   },
 
   async toggleCome (openid, come) {
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: service.comeUrl + openid,
-        method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
-        data: {
-          come
-        },
-        success: res => {
-          const data = res.data
-          if (data && data.code === 0) {
-            resolve()
-          }
-        },
-        fail: reject
-      })
+    return await util.http({
+      url: service.comeUrl + openid,
+      method: 'POST',
+      data: {
+        come
+      }
     })
   },
+
+  // async
 
   async getUserInfo (event) {
     try {
       let userInfo = wx.getStorageSync('userInfo')
       if (!userInfo) {
-        userInfo = await this.login(event.detail.userInfo)
-        console.log(userInfo)
+        const data = await this.login(event.detail.userInfo)
+        userInfo = data.userInfo
         wx.setStorageSync('userInfo', userInfo)
       }
       return userInfo
     } catch (err) {
       console.log(err)
-      notify.showModel('失败', '获取信息失败')
+      util.showModel('失败', '获取信息失败')
     }
   },
 
@@ -135,19 +116,20 @@ Page({
   },
 
   initMessages() {
-    const arr = []
+    // remove duration
+    let arr = []
     const { colors } = this.data
     const { windowWidth, windowHeight } = wx.getSystemInfoSync()
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 2; i++) {
       const color = colors[Math.floor(Math.random() * colors.length)]
       const left = windowWidth + Math.random() * windowWidth * 2 + 'px'
       const top = Math.random() * (windowHeight - 80) + 'px'
       const duration = 10 * Math.random() + 10
       // const left
       arr.push({
-        id: i,
+        id: Math.random(),
         avatar: 'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
-        content: '速度快感觉',
+        content: i,
         color,
         left,
         top,
