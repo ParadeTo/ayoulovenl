@@ -87,6 +87,6 @@
 }
 @keyframes move {
   to {
-    transform: translateX(-400vw);
+    transform: translateX(-300vw);
   }
 }

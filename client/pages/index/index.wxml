@@ -1,6 +1,6 @@
 <view class='index-page'>
   <swiper class='swiper' indicator-dots="{{false}}"
-    autoplay="{{true}}" interval="{{5000}}" duration="{{1000}}">
+    autoplay="{{false}}" interval="{{5000}}" duration="{{1000}}">
     <block wx:for="{{imgUrls}}" wx:key="{{index}}">
       <swiper-item>
         <image src="{{item}}" mode="aspectFill" class="slide-image" />
@@ -8,7 +8,7 @@
     </block>
   </swiper>
    <view class='btn-group' wx:if="{{!showInput}}">
-    <button class="button" type="primary" open-type='getUserInfo' bindgetuserinfo='wantGo'>
+    <button class="button" type="primary" open-type='getUserInfo' bindgetuserinfo='wantGo' loading="{{logining}}" disabled='{{logining}}'>
       {{ come > 0 ? "去不了" : "我要去" }}
     </button>
     <navigator url="/pages/map/map">
@@ -16,20 +16,20 @@
         <image class="map" src="./map.png"></image>
       </button>
     </navigator>
-    <button class="button info" open-type='getUserInfo' bindgetuserinfo='showInput'>说点啥</button>
+    <button loading="{{logining}}" disabled='{{logining}}' class="button info" open-type='getUserInfo' bindgetuserinfo='showInput'>说点啥</button>
   </view>
   <view wx:else class="input-wrapper">
-    <input class="input" maxlength="20" auto-focus="{{true}}" />
-    <button class="send" type="primary" size="mini">发送</button> 
+    <input value="{{content}}" maxlength="20" class="input" maxlength="20" auto-focus="{{true}}" bindinput="handleInput" />
+    <button class="send" type="primary" size="mini" bindtap="sendMessage">发送</button> 
     <button class="back" type="default" size="mini" bindtap="hideInput">返回</button>
   </view>
 
-  <block wx:for="{{messages}}" wx:key="{{item.id}}">
-    <view class='message-wrapper' style="color: {{item.color}}; top: {{item.top}}; left: {{item.left}}; animation-duration: {{item.duration}}s;">
-      <image src="{{item.avatar}}" class='avatar'></image>
+  <!-- <block > -->
+    <view wx:for="{{messages}}" wx:key="{{item.id}}" class='message-wrapper' style="color: {{item.color}}; top: {{item.top}}; left: {{item.left}}; animation-duration: {{item.duration}}s;">
+      <image src="{{item.avatar_url}}" class='avatar'></image>
       <view class='message-content'>
         {{item.content}}
       </view>
     </view>
-  </block>
+  <!-- </block> -->
 </view>

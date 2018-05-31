@@ -18,7 +18,7 @@ module.exports = async function (ctx, next) {
   if (res.data && res.data.openid) {
     ctx.$wxInfo = {
       openid: res.data.openid,
-      userInfo
+      userInfo: userInfo || {}
     }
   }
   await next()

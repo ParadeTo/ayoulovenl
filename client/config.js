@@ -17,6 +17,12 @@ var config = {
     // 我要去
     comeUrl: `${host}/weapp/user/`,
 
+    // 获取评论
+    getMessagesUrl: `${host}/weapp/messages`,
+
+    // 添加评论
+    addMessageUrl: `${host}/weapp/message/add`,
+
     // 测试的请求地址，用于测试会话
     requestUrl: `${host}/weapp/user`,
 

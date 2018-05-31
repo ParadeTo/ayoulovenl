@@ -1,3 +1,5 @@
+const regeneratorRuntime = require('./regenerator-runtime')
+
 const formatTime = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -37,24 +39,41 @@ var showModel = (title, content) => {
   })
 }
 
-var http = ({ url, data, method }) => {
-  return new Promise((resolve, reject) => {
-    wx.request({
-      url,
-      method,
-      header: {
-        'content-type': 'application/json'
-      },
-      data,
-      success: res => {
-        const data = res.data
-        if (data && data.code === 0) {
-          resolve(data.data)
-        }
-      },
-      fail: reject
+var stringify = obj => 
+  Object.keys(obj).map(key => `${key}=${obj[key]}`).join('&')
+var store = {}
+var http = async ({ url, data, method, cache }) => {
+  let res
+  const key = url + stringify(data)
+
+  if (cache) {
+    res = store[key]
+  }
+
+  if (!res) {
+    res = await new Promise((resolve, reject) => {
+      wx.request({
+        url,
+        method,
+        header: {
+          'content-type': 'application/json'
+        },
+        data,
+        success: res => {
+          const data = res.data
+          if (data && data.code === 0) {
+            resolve(data.data)
+          } else {
+            reject(res.error)
+          }
+        },
+        fail: reject
+      })
     })
-  })
+
+    store[key] = res
+  }
+  return res
 }
 
 module.exports = { http, formatTime, showBusy, showSuccess, showModel }

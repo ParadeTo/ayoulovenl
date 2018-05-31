@@ -1,4 +1,4 @@
-// const debug = require('debug')('koa-weapp-demo')
+const debug = require('debug')('koa-weapp-demo')
 
 exports.add = async (ctx, next) => {
   const { openid, content } = ctx.request.body
@@ -20,14 +20,29 @@ exports.add = async (ctx, next) => {
 
 exports.get = async (ctx, next) => {
   let { page, limit } = ctx.query
-  let list
+  let list = []
+  let total = 0
+
   if (!page || !limit) {
-    list = await global.DB('message').select('*').orderBy('create_at', 'desc')
+    list = await global.DB('message').select('message.id', 'message.content', 'message.create_at', 'user.avatar_url').orderBy('message.create_at', 'desc')
+              .leftJoin('user', 'message.openid', 'user.openid')
   } else {
-    list = await global.DB('message').select('*').orderBy('create_at', 'desc').limit(limit).offset((page - 1) * limit)
+    list = await global.DB('message').select('message.id', 'message.content', 'message.create_at', 'user.avatar_url').orderBy('message.create_at', 'desc').limit(limit).offset((page - 1) * limit)             .leftJoin('user', 'message.openid', 'user.openid')
   }
+
+  total = await global.DB('message').count('openid as count')
+  if (total && total.length > 0) {
+    total = total[0].count
+  } else {
+    total = 0
+  }
+  debug(total)
+
   ctx.state = {
     code: 0,
-    data: list
+    data: {
+      list,
+      total
+    }
   }
 }

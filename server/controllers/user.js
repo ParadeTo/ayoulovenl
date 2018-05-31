@@ -26,7 +26,7 @@ exports.come = async (ctx, next) => {
 
   if (typeof openid === 'undefined') return
 
-  await global.DB('user').update({come}).where({openid})
+  await global.DB('user').update({come, update_at: new Date()}).where({openid})
 
   ctx.state = {
     code: 0
