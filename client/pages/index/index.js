@@ -235,7 +235,7 @@ Page({
     this.setData({
       messages: arr,
       page: page + 1,
-      total: res.total
+      total: res.total || 0
     })
   }
 })
