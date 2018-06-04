@@ -4,9 +4,10 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-        "start": "pm2 start process.prod.json --no-daemon",
+        "start": "npm run dev",
         "dev": "nodemon --config nodemon.json app.js",
-        "initTables": "npm install && node tools/initTables.js"
+        "initTables": "npm install && node tools/initTables.js",
+        "#": "pm2 update && pm2 start process.prod.json --no-daemon"
     },
     "author": "Jason",
     "license": "MIT",

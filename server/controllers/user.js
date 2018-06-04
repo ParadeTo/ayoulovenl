@@ -13,9 +13,7 @@ exports.getUserInfo = async (ctx, next) => {
 
   if (users && users.length > 0) {
     ctx.state = {
-      data: {
-        ...users[0]
-      }
+      data: users[0]
     }
   }
 }

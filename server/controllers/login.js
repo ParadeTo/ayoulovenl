@@ -43,15 +43,20 @@ module.exports = async (ctx, next) => {
 
     if (userInfos.length === 0) {
       // 保存
-      await global.DB('user').insert({
-        ...obj,
-        create_at: new Date(),
-        update_at: new Date()
-      })
+      await global.DB('user').insert(Object.assign(
+        {},
+        obj,
+        {
+          create_at: new Date(),
+          update_at: new Date()
+        }
+      ))
     }
 
     if (isUpdate(obj, userInfos[0])) {
-      await global.DB('user').update({...obj, update_at: new Date()}).where({openid})
+      await global.DB('user').update(
+        Object.assign({}, obj, { update_at: new Date() })
+      ).where({openid})
     }
 
     userInfo = obj
