@@ -38,9 +38,10 @@ module.exports = async (ctx, next) => {
       avatar_url: avatarUrl
     }
 
-    // if openid not exist
+    
     let userInfos = await global.DB.select('*').from('user').where({openid})
-
+    
+    // if user not exist
     if (userInfos.length === 0) {
       // 保存
       await global.DB('user').insert(Object.assign(
@@ -51,12 +52,12 @@ module.exports = async (ctx, next) => {
           update_at: new Date()
         }
       ))
-    }
-
-    if (isUpdate(obj, userInfos[0])) {
-      await global.DB('user').update(
-        Object.assign({}, obj, { update_at: new Date() })
-      ).where({openid})
+    } else {
+      if (isUpdate(obj, userInfos[0])) {
+        await global.DB('user').update(
+          Object.assign({}, obj, { update_at: new Date() })
+        ).where({ openid })
+      }
     }
 
     userInfo = obj
